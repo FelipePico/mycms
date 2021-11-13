@@ -54,6 +54,10 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'uploads' => [
+            'driver' => 'local',
+            'root' => 'C:/xampp/htdocs/mycms/public/uploads'
+        ],
 
         's3' => [
             'driver' => 's3',
