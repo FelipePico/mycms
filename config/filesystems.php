@@ -58,6 +58,10 @@ return [
             'driver' => 'local',
             'root' => 'C:/xampp/htdocs/mycms/public/uploads'
         ],
+        'uploads_user' => [
+            'driver' => 'local',
+            'root' => 'C:/xampp/htdocs/mycms/public/uploads_users'
+        ],
 
         's3' => [
             'driver' => 's3',

@@ -18,17 +18,15 @@
 
 		<label for="email">Correo Electrónico:</label>
 		<div class="input-group">
-			<div class="input-group-prepend">
 				<div class="input-group-text"><i class="fas fa-envelope"></i></div>
-			</div>
+			
 			{!! Form::email('email', null, ['class' => 'form-control']) !!}
 		</div>
 
 		<label for="email" class="mtop16">Password:</label>
 		<div class="input-group">
-			<div class="input-group-prepend">
 				<div class="input-group-text"><i class="fas fa-lock"></i></i></div>
-			</div>
+			
 			{!! Form::password('password', ['class' => 'form-control']) !!}
 		</div>
 

@@ -1,9 +1,13 @@
-body
-	background-color #f6f6f6
-	font-size 18px
-	margin 0px	
-
 //stylus connect.styl -c -w
+body
+	align-items center
+	background-color #f6f6f6
+	display flex
+	font-size 18px
+	justify-content center
+	margin 0px	
+	min-height 100vh
+ 
 .mtop16
 	margin-top 16px
 
@@ -11,7 +15,7 @@ body
 	background-color #fff
 	border-radius 8px
 	border 1px solid #d6d6d6
-	position absolute
+	position relative
 	width 500px
 	.btn-success
 		width 100%
@@ -35,16 +39,16 @@ body
 				width 36%
 	.footer 
 		text-align center
+		font-style none !important
 		a 
+			text-decoration none !important
 			display inline-block	
 			font-size .8em		
 			&:last-child
 				margin-left 24px
 
-.box_login
-	left calc(50% - 250px)
-	top calc(50% - 196px)
 
-.box_register
-	left calc(50% - 250px)
-	top calc(50% - 326px)
+
+@media only screen and (max-width 728px)
+	.box
+		width 88%

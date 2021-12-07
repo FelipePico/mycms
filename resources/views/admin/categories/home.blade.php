@@ -5,7 +5,7 @@
 @section('breadcrumb')
 
 <li class="breadcrumb-item">
-	<a href="{{ url('/admin/categories') }}"> 
+	<a href="{{ url('admin/categories/0') }}"> 
 		<i class="far fa-folder-open"></i>Categorias
 	</a>
 </li>
@@ -23,39 +23,33 @@
 						</h2>
 					</div>
 					<div class="inside">
-						{!! Form::open(['url' => 'admin/category/add']) !!}
+						@if(kvfj(Auth::user()->permissions, 'category_add'))
+						{!! Form::open(['url' => 'admin/category/add', 'files' => true]) !!}
 						<label for="name">Nombre:</label>
 						<div class="input-group">
-							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">
 									<i class="far fa-keyboard"></i>
 								</span>
-							</div>
+							
 							{!! Form::text('name', null, ['class' => 'form-control']) !!}
 						</div>
 
 						<label for="module" class="mtop16">Módulo:</label>
 						<div class="input-group">
-							<div class="input-group-prepend">
 								<span class="input-group-text" id="basic-addon1">
 									<i class="far fa-keyboard"></i>
 								</span>
-							</div>
 							{!! Form::select('module', getModulesArray(), 0, ['class' => 'form-select']) !!}
 						</div>
 
 						<label for="icon" class="mtop16">Ícono:</label>
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text" id="basic-addon1">
-									<i class="far fa-keyboard"></i>
-								</span>
-							</div>
-							{!! Form::text('icon', null, ['class' => 'form-control']) !!}
+						<div class="custom-file">
+							{!! Form::file('icon', ['class' => 'form-control', 'required','id' => 'formFile', 'accept'=> 'image/*']) !!}
 						</div>
 
 						{!! Form::submit('Guardar', ['class' => 'btn btn-success mtop16' ]) !!}
 						{!! Form::close() !!}
+						@endif
 			 	</div>
 	     	</div>
 		</div>
@@ -78,24 +72,32 @@
 							<table class="table mtop16">
 								<thead>
 									<tr>
-										<td width="32"></td>
+										<td width="64"></td>
 										<td>Nombre</td>
-										<td width="100"></td>
+										<td width="140"></td>
 									</tr>
 								</thead>
 								<tbody>
 									@foreach($cats as $cat)
 									<tr>
-										<td>{!! htmlspecialchars_decode($cat->icono) !!}</td>
+										<td>
+											@if(!is_null($cat->icono))
+											<img src="{{ url('/uploads/'.$cat->file_path.'/'.$cat->icono) }}" class="img-fluid">
+											@endif
+										</td>
 										<td>{{ $cat->name }}</td>
 										<td>
 											<div class="opts">
+												@if(kvfj(Auth::user()->permissions, 'category_edit'))
 												<a href="{{ url('/admin/category/'.$cat->id.'/edit') }}"  data-toggle="tooltip" data-placement="top" title="Editar">
 									     			<i class="fas fa-edit"></i>
 								 				</a>
+								 				@endif
+								 				@if(kvfj(Auth::user()->permissions, 'category_delete'))
 												<a href="{{ url('/admin/category/'.$cat->id.'/delete') }}"  data-toggle="tooltip" data-placement="top" title="Eliminar">
 													<i class="fas fa-trash-alt"></i>
 												</a>
+												@endif
 											</div>
 										</td>
 									</tr>

@@ -5,7 +5,10 @@
 @section('breadcrumb')
 
 <li class="breadcrumb-item">
-	<a href="{{ url('/admin/products') }}"> <i class="fas fa-boxes"></i> Productos</a>
+	<a href="{{ url('/admin/products/all') }}"> <i class="fas fa-boxes"></i> Productos</a>
+</li>
+<li class="breadcrumb-item">
+	<a href="{{ url('/admin/product/'.$p->id.'/edit') }}"> <i class="fas fa-boxes"></i> Editar productos</a>
 </li>
 @endsection
 
@@ -26,22 +29,18 @@
 							<div class="col-md-6">
 								<label for="name">Nombre del producto:</label>
 								<div class="input-group">
-									<div class="input-group-prepend">
 										<span class="input-group-text" id="basic-addon1">
 											<i class="far fa-keyboard"></i>
 										</span>
-									</div>
 									{!! Form::text('name', $p->name, ['class' => 'form-control']) !!}
 								</div>
 							</div>
 							<div class="col-md-3">
 								<label for="category">Categoría:</label>
 								<div class="input-group">
-									<div class="input-group-prepend">
 										<span class="input-group-text" id="basic-addon1">
 											<i class="far fa-hand-pointer"></i>
 										</span>
-									</div>
 									{!! Form::select('category', $cats, $p->category_id, ['class' => 'form-select']) !!}
 								</div>
 							</div>
@@ -59,11 +58,9 @@
 							<div class="col-md-3">
 								<label for="price">Precio:</label>
 								<div class="input-group">
-									<div class="input-group-prepend">
 										<span class="input-group-text" id="basic-addon1">
 											<i class="fas fa-dollar-sign"></i>
 										</span>
-									</div>
 									{!! Form::number('price', $p->price, ['class' => 'form-control', 'min' => '0.00', 'step' => 'any' ]) !!}
 								</div>	
 							</div>
@@ -71,11 +68,9 @@
 							<div class="col-md-3">
 								<label for="indiscount">¿En descuento?:</label>
 								<div class="input-group">
-									<div class="input-group-prepend">
 										<span class="input-group-text" id="basic-addon1">
 											<i class="fas fa-percent"></i>
 										</span>
-									</div>
 									{!! Form::select('indiscount', ['0' => 'No', '1' => 'Si'], $p->in_discount, ['class' => 'form-select']) !!}
 								</div>
 							</div>
@@ -83,11 +78,9 @@
 							<div class="col-md-3">
 								<label for="discount">Descuento:</label>
 								<div class="input-group">
-									<div class="input-group-prepend">
 										<span class="input-group-text" id="basic-addon1">
 											<i class="fas fa-percent"></i>
 										</span>
-									</div>
 									{!! Form::number('discount', $p->discount, ['class' => 'form-control', 'min' => '0.00', 'step' => 'any' ]) !!}
 								</div>
 							</div>
@@ -95,17 +88,36 @@
 							<div class="col-md-3">
 								<label for="indiscount">Estado:</label>
 								<div class="input-group">
-									<div class="input-group-prepend">
 										<span class="input-group-text" id="basic-addon1">
 											<i class="fas fa-percent"></i>
 										</span>
-									</div>
 									{!! Form::select('status', ['0' => 'Borrador', '1' => 'Public'], $p->status, ['class' => 'form-select']) !!}
 								</div>
 							</div>
 
 						</div>
 
+						<div class="row mtop16">
+							<div class="col-md-3">
+								<label for="inventory">Inventario:</label>
+								<div class="input-group">
+										<span class="input-group-text" id="basic-addon1">
+											<i class="fas fa-pallet"></i>
+										</span>
+									{!! Form::number('inventory', $p->inventory, ['class' => 'form-control', 'min' => '0.00' ]) !!}
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<label for="code">Codígo de sistema:</label>
+								<div class="input-group mb-4">
+										<span class="input-group-text">
+											<i class="fab fa-slack-hash"></i>
+										</span>
+									{!! Form::text('code', $p->code, ['class' => 'form-control']) !!}
+								</div>
+							</div>
+						</div>
 
 						<div class="row mtop16">
 							<div class="col-md-12">
@@ -150,10 +162,29 @@
 						<i class="far fa-images"></i> Galería
 					</h2>
 				</div>
-				<div class="inside">
-					{!! Form::open(['url' => '/admin/product/'.$p->id.'/gallery/add', 'files' => true ]) !!}
-					{!! Form::file('file_image', ['id' => 'product_file_image', 'accept' => 'image/*']) !!}
+				<div class="inside product_gallery">
+					@if(kvfj(Auth::user()->permissions, 'product_gallery_add'))
+					{!! Form::open(['url' => '/admin/product/'.$p->id.'/gallery/add', 'files' => true, 'id' => 'form_product_gallery' ]) !!}
+					{!! Form::file('file_image', ['id' => 'product_file_image', 'accept' => 'image/*', 'style' => 'display: none;', 'requerid']) !!}
 					{!! Form::close() !!}
+					<div class="btn-submit">
+						<a href="#" id="btn_product_file_image"><i class="fas fa-plus"></i></a>
+					</div>
+					@endif
+
+					<div class="tumbs">
+						@foreach($p->getGallery as $img)
+						<div class="tumb">
+							@if(kvfj(Auth::user()->permissions, 'product_gallery_delete'))
+							<a href="{{ url('/admin/product/'.$p->id.'/gallery/'.$img->id.'/delete') }}"  data-toggle="tooltip" data-placement="top" title="Eliminar">
+								<i class="fas fa-trash-alt"></i>
+							</a>
+							@endif
+							<img src="{{ url('/uploads/'.$img->file_path.'/t_'.$img->file_name) }}">
+						</div>
+						@endforeach
+					</div>
+
 				</div>
 			</div>
 		</div>
